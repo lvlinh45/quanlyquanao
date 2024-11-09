@@ -107,14 +107,14 @@
                 $_SESSION['login'] = $row;
                 header("Location: index.php");
             } else {
-                $error = "Tên đăng nhập hoặc mật khẩu không đúng!";
+                $error = "Username or password incorrect!";
             }
         }
         ?>
 
         <form method="POST" action="">
             <div>
-                <label for="username">Tên đăng nhập:</label>
+                <label for="username">Username:</label>
                 <input placeholder="Nhập tên đăng nhập" type="text" name="username"
                     value="<?php echo htmlspecialchars($username); ?>" required>
             </div>

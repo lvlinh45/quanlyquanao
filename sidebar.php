@@ -1,22 +1,20 @@
-<!-- Sidebar -->
-
 <div class="sidebar" id="mySidebar">
     <div class="side-header">
         <img src="./assets/images/logo.png" width="120" height="120" alt="avatar">
         <h5 style="margin-top:10px; color: #000; font-weight: bold;">Hello, 
         <?php 
-            // Bắt đầu phiên
-            session_start();
+            // Start session only if it hasn't already been started
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
             
-            // Kiểm tra xem người dùng đã đăng nhập chưa
+            // Check if the user is logged in
             if (isset($_SESSION['login'])) {
-                // Lấy dữ liệu từ session
+                // Retrieve data from session
                 $user = $_SESSION['login'];
-            
-                // Truy cập các giá trị cụ thể
                 $username = $user['first_name'];
-            
-                // Hiển thị thông tin người dùng
+                
+                // Display user information
                 echo htmlspecialchars($username);
             } else {
                 echo "Bạn chưa đăng nhập.";
@@ -33,5 +31,5 @@
     <a href="#productsizes" onclick="showProductSizes()"><i class="fa fa-th-list"></i> Product Sizes</a>
     <a href="#products" onclick="showProductItems()"><i class="fa fa-th"></i> Products</a>
     <a href="#orders" onclick="showOrders()"><i class="fa fa-list"></i> Orders</a>
-    <a href="#orders" onclick="showLogOut()"><i class="fa fa-list"></i> Log Out</a>
+    <a href="#logout" onclick="showLogOut()"><i class="fa fa-sign-out"></i> Log Out</a>
 </div>

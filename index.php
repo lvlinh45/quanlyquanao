@@ -1,3 +1,24 @@
+<?php
+session_start();
+
+// Set session timeout duration (e.g., 30 minutes)
+$timeout_duration = 10; // 1800 seconds = 30 minutes
+
+// Check if the last activity timestamp is set and if the session has expired
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $timeout_duration) {
+    // Destroy the session and redirect to the login page with a session expired flag
+    session_unset();
+    session_destroy();
+    echo "<script>
+            alert('Your session has expired. You will be redirected to the login page.');
+            window.location.href = 'LogIn.php?session=expired';
+          </script>";
+    exit();
+}
+
+// Update last activity timestamp
+$_SESSION['last_activity'] = time();
+?>
 <!DOCTYPE html>
 <html>
 
@@ -112,17 +133,17 @@
     if (isset($_GET['category']) && $_GET['category'] == "success") {
         echo '<script> alert("Category Successfully Added")</script>';
     } else if (isset($_GET['category']) && $_GET['category'] == "error") {
-        echo '<script> alert("Adding Unsuccess")</script>';
+        echo '<script> alert("Adding Unsuccessful")</script>';
     }
     if (isset($_GET['size']) && $_GET['size'] == "success") {
         echo '<script> alert("Size Successfully Added")</script>';
     } else if (isset($_GET['size']) && $_GET['size'] == "error") {
-        echo '<script> alert("Adding Unsuccess")</script>';
+        echo '<script> alert("Adding Unsuccessful")</script>';
     }
     if (isset($_GET['variation']) && $_GET['variation'] == "success") {
         echo '<script> alert("Variation Successfully Added")</script>';
     } else if (isset($_GET['variation']) && $_GET['variation'] == "error") {
-        echo '<script> alert("Adding Unsuccess")</script>';
+        echo '<script> alert("Adding Unsuccessful")</script>';
     }
     ?>
 
@@ -146,9 +167,9 @@
                         borderColor: 'rgba(255, 99, 132, 1)',
                         backgroundColor: 'rgba(255, 99, 132, 0.2)',
                         borderWidth: 2,
-                        tension: 0.4, // Smooth line
-                        pointRadius: 0, // Hide points
-                        fill: true // Fill area under line
+                        tension: 0.4,
+                        pointRadius: 0,
+                        fill: true
                     },
                     {
                         label: 'Submitted',
@@ -156,9 +177,9 @@
                         borderColor: 'rgba(54, 162, 235, 1)',
                         backgroundColor: 'rgba(54, 162, 235, 0.2)',
                         borderWidth: 2,
-                        tension: 0.4, // Smooth line
-                        pointRadius: 0, // Hide points
-                        fill: true // Fill area under line
+                        tension: 0.4,
+                        pointRadius: 0,
+                        fill: true
                     }
                 ]
             },
