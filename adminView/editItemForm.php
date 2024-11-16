@@ -20,6 +20,10 @@
       <input type="text" class="form-control" id="p_name" value="<?=$row1['product_name']?>">
     </div>
     <div class="form-group">
+      <label for="color">Color:</label>
+      <input type="text" class="form-control" id="p_color" value="<?=$row1['color']?>">
+    </div>
+    <div class="form-group">
       <label for="desc">Product Description:</label>
       <input type="text" class="form-control" id="p_desc" value="<?=$row1['product_desc']?>">
     </div>

@@ -99,7 +99,7 @@
             $username = mysqli_real_escape_string($conn, $_POST['username']);
             $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-            $sql = "SELECT * FROM users WHERE email='$username' AND password='$password' and isAdmin = 1";
+            $sql = "SELECT * FROM staff WHERE email='$username' AND password='$password'";
             $result = mysqli_query($conn, $sql);
 
             if (mysqli_num_rows($result) > 0) {

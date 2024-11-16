@@ -1,19 +1,22 @@
 <?php
     include_once "../config/dbconnect.php";
 
-    $product_id=$_POST['product_id'];
-    $p_name= $_POST['p_name'];
-    $p_color= $_POST['p_color'];
-    $p_desc= $_POST['p_desc'];
-    $p_price= $_POST['p_price'];
-    $category= $_POST['category'];
+    $staff_id=$_POST['staff_id'];
+    $firstName= $_POST['firstName'];
+    $lastName= $_POST['lastName'];
+    $sex= $_POST['sex'];
+    $address= $_POST['address'];
+    $contact= $_POST['contact'];
+    $email= $_POST['email'];
+    $password= $_POST['password'];
+    $registerAt= $_POST['registerAt'];
 
     if( isset($_FILES['newImage']) ){
         
-        $location="./uploads/";
+        $location="./assets/images/";
         $img = $_FILES['newImage']['name'];
         $tmp = $_FILES['newImage']['tmp_name'];
-        $dir = '../uploads/';
+        $dir = '../assets/images/';
         $ext = strtolower(pathinfo($img, PATHINFO_EXTENSION));
         $valid_extensions = array('jpeg', 'jpg', 'png', 'gif','webp');
         $image =rand(1000,1000000).".".$ext;
@@ -25,14 +28,17 @@
     }else{
         $final_image=$_POST['existingImage'];
     }
-    $updateItem = mysqli_query($conn,"UPDATE product SET 
-        product_name='$p_name', 
-        product_desc='$p_desc', 
-        color='$p_color', 
-        price=$p_price,
-        category_id=$category,
-        product_image='$final_image' 
-        WHERE product_id=$product_id");
+    $updateItem = mysqli_query($conn,"UPDATE staff SET 
+        firstName='$firstName', 
+        lastName='$lastName', 
+        sex='$sex', 
+        staff_address='$address',
+        contact_no='$contact',
+        email='$email',
+        password='$password',
+        register_at='$registerAt',
+        avatar='$final_image' 
+        WHERE staff_id=$staff_id");
 
 
     if($updateItem)

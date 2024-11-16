@@ -7,17 +7,19 @@
 </head>
 
 <div>
-    <h2>Product Items</h2>
-    <table class="table ">
+    <h2>All Staffs</h2>
+    <table class="table">
         <thead>
             <tr>
                 <th class="text-center">S.N.</th>
-                <th class="text-center">Product Image</th>
-                <th class="text-center">Product Name</th>
-                <th class="text-center">Color</th>
-                <th class="text-center">Product Description</th>
-                <th class="text-center">Category Name</th>
-                <th class="text-center">Unit Price</th>
+                <th class="text-center">Avatar</th>
+                <th class="text-center">FullName</th>
+                <th class="text-center">sex</th>
+                <th class="text-center">Address</th>
+                <th class="text-center">Phone Number</th>
+                <th class="text-center">Email</th>
+                <th class="text-center">Password</th>
+                <th class="text-center">Register At</th>
                 <th class="text-center" colspan="2">Action</th>
             </tr>
         </thead>
@@ -30,7 +32,7 @@
     }
     $offset = ($_POST['page'] - 1) * $rowsPerPage;
 
-    $sql = "SELECT * from product, category WHERE product.category_id=category.category_id LIMIT $offset, $rowsPerPage  ";
+    $sql = "SELECT * from staff LIMIT $offset, $rowsPerPage  ";
     $result = $conn->query($sql);
     $count = 1;
     if ($result->num_rows > 0) {
@@ -38,16 +40,18 @@
         ?>
         <tr>
             <td><?= $count ?></td>
-            <td><img height='100px' src='<?= $row["product_image"] ?>'></td>
-            <td><?= $row["product_name"] ?></td>
-            <td><?= $row["color"] ?></td>
-            <td><?= $row["product_desc"] ?></td>
-            <td><?= $row["category_name"] ?></td>
-            <td><?= $row["price"] ?></td>
+            <td><img height='100px' src='<?= $row["avatar"] ?>'></td>
+            <td><?= $row["lastName"] . " " . $row["firstName"] ?></td>
+            <td><?= $row["sex"] == 0 ? "Male" : "Female" ?></td>
+            <td><?= $row["staff_address"] ?></td>
+            <td><?= $row["contact_no"] ?></td>
+            <td><?= $row["email"] ?></td>
+            <td><?= $row["password"] ?></td>
+            <td><?= $row["register_at"] ?></td>
             <td><button class="btn btn-primary" style="height:40px"
-                    onclick="itemEditForm('<?= $row['product_id'] ?>')">Edit</button></td>
+                    onclick="StaffEditForm('<?= $row['staff_id'] ?>')">Edit</button></td>
             <td><button class="btn btn-danger" style="height:40px"
-                    onclick="itemDelete('<?= $row['product_id'] ?>')">Delete</button></td>
+                    onclick="StaffDelete('<?= $row['staff_id'] ?>')">Delete</button></td>
         </tr>
         <?php
         $count = $count + 1;
@@ -58,15 +62,15 @@
 
     <?php 
         echo "<div class='pagination'>"; 
-            $re = mysqli_query($conn, 'SELECT * from product, category WHERE product.category_id=category.category_id');
+            $re = mysqli_query($conn, 'SELECT * from staff');
             $numRows = mysqli_num_rows($re);
             $maxPage = ($numRows > 0) ? floor($numRows / $rowsPerPage) + 1 : 0;  
             $page = $_POST['page'];
 
             if ($_POST['page'] > 1)
             { 
-                echo '<a href="javascript:void(0);" onclick="showProductItems(1)"><<</a>';
-                echo '<a href="javascript:void(0);" onclick="showProductItems(' . ($page - 1) . ')"><</a>';
+                echo '<a href="javascript:void(0);" onclick="showStaff(1)"><<</a>';
+                echo '<a href="javascript:void(0);" onclick="showStaff(' . ($page - 1) . ')"><</a>';
             }
 
             //tạo link tương ứng tới các trang
@@ -74,13 +78,13 @@
                 if ($i == $_POST['page']) {
                     echo '<b>' . $i . '</b> '; //trang hiện tại sẽ được bôi đậm
                 } else
-                    echo '<a href="javascript:void(0);" onclick="showProductItems(' . $i . ')">' . $i . '</a> ';
+                    echo '<a href="javascript:void(0);" onclick="showStaff(' . $i . ')">' . $i . '</a> ';
             }
             //gắn thêm nút Next
             if ($_POST['page'] < $maxPage)
             { 
-                echo '<a href="javascript:void(0);" onclick="showProductItems(' . ($page + 1) . ')">></a>';
-                echo '<a href="javascript:void(0);" onclick="showProductItems(' . $maxPage . ')">>></a>';
+                echo '<a href="javascript:void(0);" onclick="showStaff(' . ($page + 1) . ')">></a>';
+                echo '<a href="javascript:void(0);" onclick="showStaff(' . $maxPage . ')">>></a>';
             }
 
             echo "</div>";
@@ -90,7 +94,7 @@
 
     <!-- Trigger the modal with a button -->
     <button type="button" class="btn btn-secondary " style="height:40px" data-toggle="modal" data-target="#myModal">
-        Add Product
+        Add Staff
     </button>
 
     <!-- Modal -->
@@ -100,43 +104,45 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">New Product Item</h4>
+                    <h4 class="modal-title">New Staff Item</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form enctype='multipart/form-data' onsubmit="addItems()" method="POST">
-                        <div class="form-group">
-                            <label for="name">Product Name:</label>
-                            <input type="text" class="form-control" id="p_name" required>
+                    <form enctype='multipart/form-data' onsubmit="addStaffs()" method="POST">
+                    <div class="form-group">
+                            <label for="firstName">First Name:</label>
+                            <input type="text" class="form-control" id="firstName" required>
                         </div>
                         <div class="form-group">
-                            <label for="color">Color:</label>
-                            <input type="text" class="form-control" id="p_color" required>
+                            <label for="lastName">Last Name:</label>
+                            <input type="text" class="form-control" id="lastName" required>
                         </div>
                         <div class="form-group">
-                            <label for="price">Price:</label>
-                            <input type="number" class="form-control" id="p_price" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="qty">Description:</label>
-                            <input type="text" class="form-control" id="p_desc" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Category:</label>
-                            <select id="category">
-                                <option disabled selected>Select category</option>
-                                <?php
-
-                                    $sql = "SELECT * from category";
-                                    $result = $conn->query($sql);
-
-                                    if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                            echo "<option value='" . $row['category_id'] . "'>" . $row['category_name'] . "</option>";
-                                        }
-                                    }
-                                ?>
+                            <label for="sex">Sex:</label>
+                            <select class="form-control" name="sex" id="sex">
+                                <option value="0">Male</option>
+                                <option value="1">Female</option>
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address:</label>
+                            <input type="text" class="form-control" id="address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact">Phone Number:</label>
+                            <input type="text" class="form-control" id="contact" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerAt">Register At:</label>
+                            <input type="date" class="form-control" id="registerAt" required>
                         </div>
                         <div class="form-group">
                             <label for="file">Choose Image:</label>
@@ -144,7 +150,7 @@
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-secondary" id="upload" style="height:40px">Add
-                                Item</button>
+                                Staff</button>
                         </div>
                     </form>
 

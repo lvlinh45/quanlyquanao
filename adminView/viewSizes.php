@@ -6,6 +6,9 @@
       <tr>
         <th class="text-center">S.N.</th>
         <th class="text-center">Size</th>
+        <th class="text-center">Sex</th>
+        <th class="text-center">Weight</th>
+        <th class="text-center">Height</th>
         <th class="text-center" colspan="2">Action</th>
       </tr>
     </thead>
@@ -24,7 +27,10 @@
     ?>
     <tr>
       <td><?=$count?></td>
-      <td><?=$row["size_name"]?></td>   
+      <td><?=$row["size_name"]?></td>
+      <td><?= $row["sex"] == 0 ? "Male" : "Female" ?></td> 
+      <td><?=$row["weight"]?></td>   
+      <td><?=$row["height"]?></td> 
       <!-- <td><button class="btn btn-primary" >Edit</button></td> -->
       <td><button class="btn btn-danger" style="height:40px" onclick="sizeDelete('<?=$row['size_id']?>')">Delete</button></td>
       </tr>
@@ -86,6 +92,21 @@
             <div class="form-group">
               <label for="size">Size Number:</label>
               <input type="text" class="form-control" name="size" required>
+            </div>
+            <div class="form-group">
+              <label for="sex">Sex:</label>
+              <select class="form-control" name="sex" id="">
+                <option value="0">Male</option>
+                <option value="1">Female</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="weight">Weight:</label>
+              <input type="text" class="form-control" name="weight" required>
+            </div>
+            <div class="form-group">
+              <label for="height">Height:</label>
+              <input type="text" class="form-control" name="height" required>
             </div>
             <div class="form-group">
               <button type="submit" class="btn btn-secondary" name="upload" style="height:40px">Add Size</button>

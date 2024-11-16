@@ -17,7 +17,7 @@
           $_POST['page'] = 1;
       }
       $offset = ($_POST['page'] - 1) * $rowsPerPage;
-      $sql="SELECT * from users where isAdmin=0 LIMIT $offset, $rowsPerPage";
+      $sql="SELECT * from users LIMIT $offset, $rowsPerPage";
       $result=$conn-> query($sql);
       $count=1;
       if ($result-> num_rows > 0){
@@ -26,7 +26,7 @@
     ?>
     <tr>
       <td><?=$count?></td>
-      <td><?=$row["first_name"]?> <?=$row["last_name"]?></td>
+      <td><?=$row["last_name"]?> <?=$row["first_name"]?></td>
       <td><?=$row["email"]?></td>
       <td><?=$row["contact_no"]?></td>
       <td><?=$row["registered_at"]?></td>
@@ -41,7 +41,7 @@
 
   <?php
   echo "<div class='pagination'>"; 
-    $re = mysqli_query($conn, 'SELECT * FROM users where isAdmin = 0');
+    $re = mysqli_query($conn, 'SELECT * FROM users');
     $numRows = mysqli_num_rows($re);
     $maxPage = ($numRows > 0) ? floor($numRows / $rowsPerPage) + 1 : 0;
     $page = $_POST['page'];

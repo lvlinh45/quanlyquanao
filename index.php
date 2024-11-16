@@ -2,7 +2,7 @@
 session_start();
 
 // Set session timeout duration (e.g., 30 minutes)
-$timeout_duration = 10; // 1800 seconds = 30 minutes
+$timeout_duration = 1800; // 1800 seconds = 30 minutes
 
 // Check if the last activity timestamp is set and if the session has expired
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $timeout_duration) {
@@ -47,7 +47,7 @@ $_SESSION['last_activity'] = time();
                         <h4>Total Users</h4>
                         <h5>
                             <?php
-                            $sql = "SELECT * from users where isAdmin=0";
+                            $sql = "SELECT * from users";
                             $result = $conn->query($sql);
                             $count = 0;
                             if ($result->num_rows > 0) {

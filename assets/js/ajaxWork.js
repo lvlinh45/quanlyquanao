@@ -83,6 +83,21 @@ function showCustomers(page = 1) {
     .catch(error => console.error('Error:', error));
 }
 
+function showStaff(page = 1) {
+    fetch("./adminView/viewStaffs.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams({ record: 1, page: page }) // Gửi dữ liệu
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.querySelector('.allContent-section').innerHTML = data;
+    })
+    .catch(error => console.error('Error:', error));
+}
+
 function showOrders(page = 1) {
     fetch("./adminView/viewAllOrders.php", {
         method: "POST",
@@ -128,6 +143,7 @@ function ChangePay(id){
 //add product data
 function addItems(){
     var p_name=$('#p_name').val();
+    var p_color = $('#p_color').val();
     var p_desc=$('#p_desc').val();
     var p_price=$('#p_price').val();
     var category=$('#category').val();
@@ -136,6 +152,7 @@ function addItems(){
 
     var fd = new FormData();
     fd.append('p_name', p_name);
+    fd.append('p_color', p_color);
     fd.append('p_desc', p_desc);
     fd.append('p_price', p_price);
     fd.append('category', category);
@@ -155,6 +172,43 @@ function addItems(){
     });
 }
 
+function addStaffs(){
+    var firstName = $('#firstName').val();
+    var lastName = $('#lastName').val();
+    var sex = $('#sex').val();
+    var address = $('#address').val();
+    var contact = $('#contact').val();
+    var email = $('#email').val();
+    var password = $('#password').val();
+    var registerAt = $('#registerAt').val();
+    var upload=$('#upload').val();
+    var file=$('#file')[0].files[0];
+
+    var fd = new FormData();
+    fd.append('firstName', firstName);
+    fd.append('lastName', lastName);
+    fd.append('sex', sex);
+    fd.append('address', address);
+    fd.append('contact', contact);
+    fd.append('email', email);
+    fd.append('password', password);
+    fd.append('registerAt', registerAt);
+    fd.append('file', file);
+    fd.append('upload', upload);
+    $.ajax({
+        url:"./controller/addStaffController.php",
+        method:"post",
+        data:fd,
+        processData: false,
+        contentType: false,
+        success: function(data){
+            alert('Staff Added successfully.');
+            $('form').trigger('reset');
+            showStaff();
+        }
+    });
+}
+
 //edit product data
 function itemEditForm(id){
     $.ajax({
@@ -167,10 +221,22 @@ function itemEditForm(id){
     });
 }
 
+function StaffEditForm(id){
+    $.ajax({
+        url:"./adminView/editStaffForm.php",
+        method:"post",
+        data:{record:id},
+        success:function(data){
+            $('.allContent-section').html(data);
+        }
+    });
+}
+
 //update product after submit
 function updateItems(){
     var product_id = $('#product_id').val();
     var p_name = $('#p_name').val();
+    var p_color = $('#p_color').val();
     var p_desc = $('#p_desc').val();
     var p_price = $('#p_price').val();
     var category = $('#category').val();
@@ -179,6 +245,7 @@ function updateItems(){
     var fd = new FormData();
     fd.append('product_id', product_id);
     fd.append('p_name', p_name);
+    fd.append('p_color', p_color);
     fd.append('p_desc', p_desc);
     fd.append('p_price', p_price);
     fd.append('category', category);
@@ -199,6 +266,45 @@ function updateItems(){
     });
 }
 
+function updateStaff(){
+    var staff_id = $('#staff_id').val();
+    var firstName = $('#firstName').val();
+    var lastName = $('#lastName').val();
+    var sex = $('#sex').val();
+    var address = $('#address').val();
+    var contact = $('#contact').val();
+    var email = $('#email').val();
+    var password = $('#password').val();
+    var registerAt = $('#registerAt').val();
+    var existingImage = $('#existingImage').val();
+    var newImage = $('#newImage')[0].files[0];
+    var fd = new FormData();
+    fd.append('staff_id', staff_id);
+    fd.append('firstName', firstName);
+    fd.append('lastName', lastName);
+    fd.append('sex', sex);
+    fd.append('address', address);
+    fd.append('contact', contact);
+    fd.append('email', email);
+    fd.append('password', password);
+    fd.append('registerAt', registerAt);
+    fd.append('existingImage', existingImage);
+    fd.append('newImage', newImage);
+   
+    $.ajax({
+      url:'./controller/updateStaffController.php',
+      method:'post',
+      data:fd,
+      processData: false,
+      contentType: false,
+      success: function(data){
+        alert('Data Update Success.');
+        $('form').trigger('reset');
+        showStaff();
+      }
+    });
+}
+
 //delete product data
 function itemDelete(id){
     $.ajax({
@@ -213,6 +319,18 @@ function itemDelete(id){
     });
 }
 
+function StaffDelete(id){
+    $.ajax({
+        url:"./controller/deleteStaffController.php",
+        method:"post",
+        data:{record:id},
+        success:function(data){
+            alert('Items Successfully deleted');
+            $('form').trigger('reset');
+            showStaff();
+        }
+    });
+}
 
 //delete cart data
 function cartDelete(id){

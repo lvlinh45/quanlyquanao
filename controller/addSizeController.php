@@ -5,9 +5,12 @@
     {
        
         $size = $_POST['size'];
+        $sex = $_POST['sex'];
+        $weight = $_POST['weight'];
+        $height = $_POST['height'];
        
-         $insert = mysqli_query($conn,"INSERT INTO sizes
-         (size_name)   VALUES ('$size')");
+        $insert = mysqli_query($conn, "INSERT INTO sizes (size_name, sex, weight, height) 
+        VALUES ('$size', '$sex', '$weight', '$height')");
  
          if(!$insert)
          {
