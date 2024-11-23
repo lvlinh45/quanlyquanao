@@ -43,7 +43,7 @@
           <td><?=$row["pay_method"]?></td>
             <td>
                 <?php if ($row["order_status"] == 0) { ?>
-                  <form method="post" action="../mail.php">
+                  <form method="post" action="./mail.php">
                       <input type="hidden" name="order_id" value="<?= htmlspecialchars($row['order_id'], ENT_QUOTES, 'UTF-8') ?>">
                       <button class="btn btn-danger" type="submit" name="action" value="update_order_status_pending" onclick="ChangeOrderStatus('<?=$row['order_id']?>')">
                           Pending
@@ -55,7 +55,7 @@
             </td>
             <td>
                 <?php if ($row["pay_status"] == 0) { ?>
-                  <form method="post" action="../mail.php">
+                  <form method="post" action="./mail.php">
                       <input type="hidden" name="order_id" value="<?= htmlspecialchars($row['order_id'], ENT_QUOTES, 'UTF-8') ?>">
                       <button class="btn btn-danger" type="submit" name="action" value="update_pay_status_unpaid" onclick="ChangePay('<?=$row['order_id']?>')">
                           Unpaid
