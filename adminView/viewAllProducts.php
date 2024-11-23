@@ -7,8 +7,39 @@
 </head>
 
 <div>
+    <?php 
+        include_once "../config/dbconnect.php";
+
+        $search = ""; // Biến lưu giá trị tìm kiếm
+        if (isset($_POST["btnSearch"])) {
+            $search = $_POST["search"];
+        }
+
+        $rowsPerPage = 5; 
+        $page = isset($_POST['page']) ? $_POST['page'] : 1;
+        $offset = ($page - 1) * $rowsPerPage;
+
+        $sql = "SELECT * FROM product 
+                JOIN category 
+                ON product.category_id = category.category_id 
+                WHERE product_name LIKE '%$search%' 
+                LIMIT $offset, $rowsPerPage";
+        $result = $conn->query($sql);
+    ?>
+
     <h2>Product Items</h2>
-    <table class="table ">
+    <form action="" method="post">
+        <div style="display: flex; 
+                    justify-content: center;
+                    gap: 20px;
+                    margin-bottom: 20px;
+                    align-items: center">
+            <input type="text" name="search" style="width: 90%; padding: 10px 20px; border-radius: 30px;" id="" placeholder="Tìm kiếm ...." value="<?= htmlspecialchars($search) ?>">
+            <button type="submit" name="btnSearch" style="line-height: 15px; border-radius: 15px; padding: 10px 20px" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    <table class="table">
         <thead>
             <tr>
                 <th class="text-center">S.N.</th>
@@ -22,71 +53,61 @@
             </tr>
         </thead>
         <?php
-    include_once "../config/dbconnect.php";
-
-    $rowsPerPage = 5; 
-    if (!isset($_POST['page'])) {
-        $_POST['page'] = 1;
-    }
-    $offset = ($_POST['page'] - 1) * $rowsPerPage;
-
-    $sql = "SELECT * from product, category WHERE product.category_id=category.category_id LIMIT $offset, $rowsPerPage  ";
-    $result = $conn->query($sql);
-    $count = 1;
-    if ($result->num_rows > 0) {
-      while ($row = $result->fetch_assoc()) {
+        $count = $offset + 1;
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
         ?>
-        <tr>
-            <td><?= $count ?></td>
-            <td><img height='100px' src='<?= $row["product_image"] ?>'></td>
-            <td><?= $row["product_name"] ?></td>
-            <td><?= $row["color"] ?></td>
-            <td><?= $row["product_desc"] ?></td>
-            <td><?= $row["category_name"] ?></td>
-            <td><?= $row["price"] ?></td>
-            <td><button class="btn btn-primary" style="height:40px"
-                    onclick="itemEditForm('<?= $row['product_id'] ?>')">Edit</button></td>
-            <td><button class="btn btn-danger" style="height:40px"
-                    onclick="itemDelete('<?= $row['product_id'] ?>')">Delete</button></td>
-        </tr>
+            <tr>
+                <td><?= $count ?></td>
+                <td><img height='100px' src='<?= $row["product_image"] ?>'></td>
+                <td><?= $row["product_name"] ?></td>
+                <td><?= $row["color"] ?></td>
+                <td><?= $row["product_desc"] ?></td>
+                <td><?= $row["category_name"] ?></td>
+                <td><?= $row["price"] ?></td>
+                <td><button class="btn btn-primary" style="height:40px"
+                        onclick="itemEditForm('<?= $row['product_id'] ?>')">Edit</button></td>
+                <td><button class="btn btn-danger" style="height:40px"
+                        onclick="itemDelete('<?= $row['product_id'] ?>')">Delete</button></td>
+            </tr>
         <?php
-        $count = $count + 1;
-      }
-    }
-    ?>
+                $count++;
+            }
+        } else {
+            echo "<tr><td colspan='8' class='text-center'>No products found</td></tr>";
+        }
+        ?>
     </table>
 
     <?php 
-        echo "<div class='pagination'>"; 
-            $re = mysqli_query($conn, 'SELECT * from product, category WHERE product.category_id=category.category_id');
+        // Tạo phân trang
+        echo "<div class='pagination'>";
+            $re = mysqli_query($conn, "SELECT * FROM product 
+                                       JOIN category 
+                                       ON product.category_id = category.category_id 
+                                       WHERE product_name LIKE '%$search%'");
             $numRows = mysqli_num_rows($re);
-            $maxPage = ($numRows > 0) ? floor($numRows / $rowsPerPage) + 1 : 0;  
-            $page = $_POST['page'];
+            $maxPage = ($numRows > 0) ? ceil($numRows / $rowsPerPage) : 1;
 
-            if ($_POST['page'] > 1)
-            { 
+            if ($page > 1) { 
                 echo '<a href="javascript:void(0);" onclick="showProductItems(1)"><<</a>';
                 echo '<a href="javascript:void(0);" onclick="showProductItems(' . ($page - 1) . ')"><</a>';
             }
 
-            //tạo link tương ứng tới các trang
             for ($i = 1; $i <= $maxPage; $i++) {
-                if ($i == $_POST['page']) {
-                    echo '<b>' . $i . '</b> '; //trang hiện tại sẽ được bôi đậm
-                } else
+                if ($i == $page) {
+                    echo '<b>' . $i . '</b> ';
+                } else {
                     echo '<a href="javascript:void(0);" onclick="showProductItems(' . $i . ')">' . $i . '</a> ';
+                }
             }
-            //gắn thêm nút Next
-            if ($_POST['page'] < $maxPage)
-            { 
+
+            if ($page < $maxPage) { 
                 echo '<a href="javascript:void(0);" onclick="showProductItems(' . ($page + 1) . ')">></a>';
                 echo '<a href="javascript:void(0);" onclick="showProductItems(' . $maxPage . ')">>></a>';
             }
-
-            echo "</div>";
-
-        ?>
-
+        echo "</div>";
+    ?>
 
     <!-- Trigger the modal with a button -->
     <button type="button" class="btn btn-secondary " style="height:40px" data-toggle="modal" data-target="#myModal">
