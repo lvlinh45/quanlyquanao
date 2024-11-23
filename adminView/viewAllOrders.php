@@ -41,23 +41,31 @@
           <td><?=$row["email"]?></td>
           <td><?=$row["order_date"]?></td>
           <td><?=$row["pay_method"]?></td>
-          <form method="post" action="../mail.php">
-            <input type="hidden" name="order_id" value="<?=$row['order_id']?>">
             <td>
                 <?php if ($row["order_status"] == 0) { ?>
-                    <button class="btn btn-danger" type="submit" name="action" value="update_order_status_pending" onclick="ChangeOrderStatus('<?=$row['order_id']?>')">Pending</button>
+                  <form method="post" action="../mail.php">
+                      <input type="hidden" name="order_id" value="<?= htmlspecialchars($row['order_id'], ENT_QUOTES, 'UTF-8') ?>">
+                      <button class="btn btn-danger" type="submit" name="action" value="update_order_status_pending" onclick="ChangeOrderStatus('<?=$row['order_id']?>')">
+                          Pending
+                      </button>
+                  </form>
                 <?php } else { ?>
-                    <button class="btn btn-success" type="submit" name="action" value="update_order_status_delivered" onclick="ChangeOrderStatus('<?=$row['order_id']?>')">Delivered</button>
+                    <button class="btn btn-success" name="action" value="update_order_status_delivered" onclick="ChangeOrderStatus('<?=$row['order_id']?>')">Delivered</button>
                 <?php } ?>
             </td>
             <td>
                 <?php if ($row["pay_status"] == 0) { ?>
-                    <button class="btn btn-danger" type="submit" name="action" value="update_pay_status_unpaid" onclick="ChangePay('<?=$row['order_id']?>')">Unpaid</button>
+                  <form method="post" action="../mail.php">
+                      <input type="hidden" name="order_id" value="<?= htmlspecialchars($row['order_id'], ENT_QUOTES, 'UTF-8') ?>">
+                      <button class="btn btn-danger" type="submit" name="action" value="update_pay_status_unpaid" onclick="ChangePay('<?=$row['order_id']?>')">
+                          Unpaid
+                      </button>
+                  </form>
                 <?php } else { ?>
-                    <button class="btn btn-success" type="submit" name="action" value="update_pay_status_paid" onclick="ChangePay('<?=$row['order_id']?>')" >Paid</button>
+                    <button class="btn btn-success" name="action" value="update_pay_status_paid" onclick="ChangePay('<?=$row['order_id']?>')" >Paid</button>
                 <?php } ?>
             </td>
-        </form>
+        
 
               
         <td><button class="btn btn-primary openPopup" onclick='
