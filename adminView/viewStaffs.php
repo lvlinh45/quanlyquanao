@@ -136,10 +136,23 @@
                             <label for="email">Email:</label>
                             <input type="email" class="form-control" id="email" required>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="password">Password:</label>
                             <input type="password" class="form-control" id="password" required>
+                        </div> -->
+                    <div class="form-group">
+                        <label for="password">Password:</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" id="password" required>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility()">
+                                    <i class="fa fa-eye" id="toggleIcon"></i>
+                                </button>
+                            </div>
                         </div>
+                    </div>
+
+
                         <div class="form-group">
                             <label for="registerAt">Register At:</label>
                             <input type="date" class="form-control" id="registerAt" required>

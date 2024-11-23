@@ -6,6 +6,8 @@
         <th>O.N.</th>
         <th>Customer</th>
         <th>Contact</th>
+        <th>Product Name</th>
+        <th>Email</th>
         <th>OrderDate</th>
         <th>Payment Method</th>
         <th>Order Status</th>
@@ -20,7 +22,12 @@
           $_POST['page'] = 1;
       }
       $offset = ($_POST['page'] - 1) * $rowsPerPage;
-      $sql="SELECT * from orders LIMIT $offset, $rowsPerPage";
+      $sql="SELECT * from orders 
+            INNER Join users on orders.user_id = users.user_id
+            INNER Join order_details on order_details.order_id = orders.order_id
+            Inner Join product_size_variation on order_details.variation_id = product_size_variation.variation_id
+            inner join product on product.product_id = product_size_variation.product_id
+             LIMIT $offset, $rowsPerPage";
       $result=$conn-> query($sql);
       
       if ($result-> num_rows > 0){
@@ -28,8 +35,10 @@
     ?>
        <tr>
           <td><?=$row["order_id"]?></td>
-          <td><?=$row["delivered_to"]?></td>
-          <td><?=$row["phone_no"]?></td>
+          <td><?=$row["first_name"]?></td>
+          <td><?=$row["contact_no"]?></td>
+          <td><?=$row["product_name"]?></td>
+          <td><?=$row["email"]?></td>
           <td><?=$row["order_date"]?></td>
           <td><?=$row["pay_method"]?></td>
            <?php 
