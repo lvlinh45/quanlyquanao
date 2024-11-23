@@ -11,6 +11,8 @@
         </tr>
     </thead>
     <?php
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);        
         include_once "../config/dbconnect.php";
         $ID= $_GET['orderID'];
         //echo $ID;
@@ -42,7 +44,7 @@
                         $res2=$conn-> query($subqry2);
                         if($row3 = $res2-> fetch_assoc()){
                         ?>
-                    <td><?=$row3["size_name"] ?></td>
+                        <td><?=$row3["size_name"] ?></td>
                     <?php
                         }
                     ?>
