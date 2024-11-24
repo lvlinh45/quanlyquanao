@@ -118,14 +118,6 @@ $_SESSION['last_activity'] = time();
                     </div>
                 </div>
             </div>
-
-            <!-- New Line Chart Section -->
-            <div class="row mt-5">
-                <div class="col-12">
-                    <h4>Claims Over the Years</h4>
-                    <canvas id="claimsChart"></canvas>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -152,75 +144,6 @@ $_SESSION['last_activity'] = time();
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script>
-        // Line Chart for Claims
-        var ctx = document.getElementById('claimsChart').getContext('2d');
-        var claimsChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['2019', '2020', '2021', '2022', '2023', '2024'],
-                datasets: [
-                    {
-                        label: 'Approved',
-                        data: [20, 30, 25, 35, 40, 30],
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        pointRadius: 0,
-                        fill: true
-                    },
-                    {
-                        label: 'Submitted',
-                        data: [15, 25, 30, 35, 45, 40],
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        pointRadius: 0,
-                        fill: true
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: true,
-                        labels: {
-                            usePointStyle: true,
-                            boxWidth: 8
-                        }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function (context) {
-                                return `${context.dataset.label}: ${context.raw}`;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: {
-                            display: false
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        max: 50,
-                        ticks: {
-                            stepSize: 10
-                        },
-                        grid: {
-                            color: 'rgba(200, 200, 200, 0.2)'
-                        }
-                    }
-                }
-            }
-        });
-    </script>
 
 </body>
 
