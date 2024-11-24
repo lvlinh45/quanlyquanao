@@ -1,30 +1,29 @@
 <head>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 
 <div>
-    <?php 
-        include_once "../config/dbconnect.php";
+    <?php
+    include_once "../config/dbconnect.php";
 
-        $search = ""; // Biến lưu giá trị tìm kiếm
-        if (isset($_POST["btnSearch"])) {
-            $search = $_POST["search"];
-        }
+    $search = ""; // Biến lưu giá trị tìm kiếm
+    if (isset($_POST["btnSearch"])) {
+        $search = $_POST["search"];
+    }
 
-        $rowsPerPage = 5; 
-        $page = isset($_POST['page']) ? $_POST['page'] : 1;
-        $offset = ($page - 1) * $rowsPerPage;
+    $rowsPerPage = 5;
+    $page = isset($_POST['page']) ? $_POST['page'] : 1;
+    $offset = ($page - 1) * $rowsPerPage;
 
-        $sql = "SELECT * FROM product 
+    $sql = "SELECT * FROM product 
                 JOIN category 
                 ON product.category_id = category.category_id 
                 WHERE product_name LIKE '%$search%' 
                 LIMIT $offset, $rowsPerPage";
-        $result = $conn->query($sql);
+    $result = $conn->query($sql);
     ?>
 
     <h2>Product Items</h2>
@@ -34,8 +33,10 @@
                     gap: 20px;
                     margin-bottom: 20px;
                     align-items: center">
-            <input type="text" name="search" style="width: 90%; padding: 10px 20px; border-radius: 30px;" id="" placeholder="Tìm kiếm ...." value="<?= htmlspecialchars($search) ?>">
-            <button type="submit" name="btnSearch" style="line-height: 15px; border-radius: 15px; padding: 10px 20px" class="btn btn-primary">Search</button>
+            <input type="text" name="search" style="width: 90%; padding: 10px 20px; border-radius: 30px;" id=""
+                placeholder="Tìm kiếm ...." value="<?= htmlspecialchars($search) ?>">
+            <button type="submit" name="btnSearch" style="line-height: 15px; border-radius: 15px; padding: 10px 20px"
+                class="btn btn-primary">Search</button>
         </div>
     </form>
 
@@ -56,21 +57,21 @@
         $count = $offset + 1;
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-        ?>
-            <tr>
-                <td><?= $count ?></td>
-                <td><img height='100px' src='<?= $row["product_image"] ?>'></td>
-                <td><?= $row["product_name"] ?></td>
-                <td><?= $row["color"] ?></td>
-                <td><?= $row["product_desc"] ?></td>
-                <td><?= $row["category_name"] ?></td>
-                <td><?= $row["price"] ?></td>
-                <td><button class="btn btn-primary" style="height:40px"
-                        onclick="itemEditForm('<?= $row['product_id'] ?>')">Edit</button></td>
-                <td><button class="btn btn-danger" style="height:40px"
-                        onclick="itemDelete('<?= $row['product_id'] ?>')">Delete</button></td>
-            </tr>
-        <?php
+                ?>
+                <tr>
+                    <td><?= $count ?></td>
+                    <td><img height='100px' src='<?= $row["product_image"] ?>'></td>
+                    <td><?= $row["product_name"] ?></td>
+                    <td><?= $row["color"] ?></td>
+                    <td><?= $row["product_desc"] ?></td>
+                    <td><?= $row["category_name"] ?></td>
+                    <td><?= $row["price"] ?></td>
+                    <td><button class="btn btn-primary" style="height:40px"
+                            onclick="itemEditForm('<?= $row['product_id'] ?>')">Edit</button></td>
+                    <td><button class="btn btn-danger" style="height:40px"
+                            onclick="itemDelete('<?= $row['product_id'] ?>')">Delete</button></td>
+                </tr>
+                <?php
                 $count++;
             }
         } else {
@@ -79,34 +80,34 @@
         ?>
     </table>
 
-    <?php 
-        // Tạo phân trang
-        echo "<div class='pagination'>";
-            $re = mysqli_query($conn, "SELECT * FROM product 
+    <?php
+    // Tạo phân trang
+    echo "<div class='pagination'>";
+    $re = mysqli_query($conn, "SELECT * FROM product 
                                        JOIN category 
                                        ON product.category_id = category.category_id 
                                        WHERE product_name LIKE '%$search%'");
-            $numRows = mysqli_num_rows($re);
-            $maxPage = ($numRows > 0) ? ceil($numRows / $rowsPerPage) : 1;
+    $numRows = mysqli_num_rows($re);
+    $maxPage = ceil($numRows / $rowsPerPage);
 
-            if ($page > 1) { 
-                echo '<a href="javascript:void(0);" onclick="showProductItems(1)"><<</a>';
-                echo '<a href="javascript:void(0);" onclick="showProductItems(' . ($page - 1) . ')"><</a>';
-            }
+    if ($page > 1) {
+        echo '<a href="javascript:void(0);" onclick="showProductItems(1)"><<</a>';
+        echo '<a href="javascript:void(0);" onclick="showProductItems(' . ($page - 1) . ')"><</a>';
+    }
 
-            for ($i = 1; $i <= $maxPage; $i++) {
-                if ($i == $page) {
-                    echo '<b>' . $i . '</b> ';
-                } else {
-                    echo '<a href="javascript:void(0);" onclick="showProductItems(' . $i . ')">' . $i . '</a> ';
-                }
-            }
+    for ($i = 1; $i <= $maxPage; $i++) {
+        if ($i == $page) {
+            echo '<b>' . $i . '</b> ';
+        } else {
+            echo '<a href="javascript:void(0);" onclick="showProductItems(' . $i . ')">' . $i . '</a> ';
+        }
+    }
 
-            if ($page < $maxPage) { 
-                echo '<a href="javascript:void(0);" onclick="showProductItems(' . ($page + 1) . ')">></a>';
-                echo '<a href="javascript:void(0);" onclick="showProductItems(' . $maxPage . ')">>></a>';
-            }
-        echo "</div>";
+    if ($page < $maxPage) {
+        echo '<a href="javascript:void(0);" onclick="showProductItems(' . ($page + 1) . ')">></a>';
+        echo '<a href="javascript:void(0);" onclick="showProductItems(' . $maxPage . ')">>></a>';
+    }
+    echo "</div>";
     ?>
 
     <!-- Trigger the modal with a button -->
@@ -148,14 +149,14 @@
                                 <option disabled selected>Select category</option>
                                 <?php
 
-                                    $sql = "SELECT * from category";
-                                    $result = $conn->query($sql);
+                                $sql = "SELECT * from category";
+                                $result = $conn->query($sql);
 
-                                    if ($result->num_rows > 0) {
+                                if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
-                                            echo "<option value='" . $row['category_id'] . "'>" . $row['category_name'] . "</option>";
-                                        }
+                                        echo "<option value='" . $row['category_id'] . "'>" . $row['category_name'] . "</option>";
                                     }
+                                }
                                 ?>
                             </select>
                         </div>
@@ -175,7 +176,7 @@
                         style="height:40px">Close</button>
                 </div>
             </div>
-            
+
         </div>
     </div>
 
@@ -184,6 +185,6 @@
 
 
 <script type="text/javascript" src="./assets/js/ajaxWork.js"></script>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>

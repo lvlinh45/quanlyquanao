@@ -1,25 +1,38 @@
-<div class="sidebar" id="mySidebar">
+<div class="sidebar" id="mySidebar"
+    style="border-right: 1px solid rgba(0, 0, 0, 0.1); box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);">
     <div class="side-header">
-        <img src="./assets/images/logo.png" width="120" height="120" alt="avatar">
-        <h5 style="margin-top:10px; color: #000; font-weight: bold;">Hello, 
-        <?php 
+        <?php
+        if (isset($_SESSION['login'])) {
+            $user = $_SESSION['login'];
+            // Kiểm tra nếu có avatar trong thông tin user
+            if (!empty($user['avatar'])) {
+                echo '<img src="' . $user['avatar'] . '" width="120" height="120" alt="User avatar">';
+            } else {
+                echo '<img src="./assets/images/default-avatar.png" width="120" height="120" alt="Default avatar">';
+            }
+        } else {
+            echo '<img src="./assets/images/logo.png" width="120" height="120" alt="Default avatar">';
+        }
+        ?>
+        <h5 style="margin-top:10px; color: #000; font-weight: bold;">Hello,
+            <?php
             // Start session only if it hasn't already been started
             if (session_status() === PHP_SESSION_NONE) {
                 session_start();
             }
-            
+
             // Check if the user is logged in
             if (isset($_SESSION['login'])) {
                 // Retrieve data from session
                 $user = $_SESSION['login'];
                 $username = $user['firstName'];
-                
+
                 // Display user information
                 echo htmlspecialchars($username);
             } else {
                 echo "Bạn chưa đăng nhập.";
             }
-        ?>
+            ?>
         </h5>
     </div>
 

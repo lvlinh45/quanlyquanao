@@ -118,8 +118,54 @@ $_SESSION['last_activity'] = time();
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <!-- Thêm container cho biểu đồ -->
+                <div class="container mt-4">
+                    <div class="row">
+                        <div class="col-12">
+                            <canvas id="statisticsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <?php
+                // Lưu các biến đếm để sử dụng trong biểu đồ
+                $usersCount = $categoriesCount = $productsCount = $ordersCount = 0;
+
+                // Đếm Users
+                $sql = "SELECT COUNT(*) as count FROM users";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    $usersCount = $result->fetch_assoc()['count'];
+                }
+
+                // Đếm Categories
+                $sql = "SELECT COUNT(*) as count FROM category";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    $categoriesCount = $result->fetch_assoc()['count'];
+                }
+
+                // Đếm Products
+                $sql = "SELECT COUNT(*) as count FROM product";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    $productsCount = $result->fetch_assoc()['count'];
+                }
+
+                // Đếm Orders
+                $sql = "SELECT COUNT(*) as count FROM orders";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    $ordersCount = $result->fetch_assoc()['count'];
+                }
+                ?>
+            </div>
         </div>
     </div>
+
+
+
 
     <?php
     if (isset($_GET['category']) && $_GET['category'] == "success") {
@@ -138,7 +184,60 @@ $_SESSION['last_activity'] = time();
         echo '<script> alert("Adding Unsuccessful")</script>';
     }
     ?>
-
+    <!-- Script để vẽ biểu đồ -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('statisticsChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Users', 'Categories', 'Products', 'Orders'],
+                    datasets: [{
+                        label: 'Statistics',
+                        data: [<?php echo $usersCount; ?>, <?php echo $categoriesCount; ?>,
+                            <?php echo $productsCount; ?>, <?php echo $ordersCount; ?>
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 206, 86, 0.5)',
+                            'rgba(75, 192, 192, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'System Statistics',
+                            color: 'black',
+                            font: {
+                                size: 28
+                            }
+                        },
+                        legend: {
+                            labels: {
+                                color: 'black'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
     <script type="text/javascript" src="./assets/js/ajaxWork.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
