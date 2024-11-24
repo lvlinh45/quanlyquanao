@@ -6,6 +6,8 @@
 </head>
 
 <div>
+
+
     <?php
     include_once "../config/dbconnect.php";
 
@@ -18,27 +20,19 @@
     $page = isset($_POST['page']) ? $_POST['page'] : 1;
     $offset = ($page - 1) * $rowsPerPage;
 
+    // Điều chỉnh câu truy vấn SQL để hỗ trợ tìm kiếm
     $sql = "SELECT * FROM product 
-                JOIN category 
-                ON product.category_id = category.category_id 
-                WHERE product_name LIKE '%$search%' 
-                LIMIT $offset, $rowsPerPage";
+            JOIN category ON product.category_id = category.category_id";
+
+    if ($search != "") {
+        $sql .= " WHERE product_name LIKE '%$search%'";
+    }
+
+    $sql .= " LIMIT $offset, $rowsPerPage";
     $result = $conn->query($sql);
     ?>
 
     <h2>Product Items</h2>
-    <form action="" method="post">
-        <div style="display: flex; 
-                    justify-content: center;
-                    gap: 20px;
-                    margin-bottom: 20px;
-                    align-items: center">
-            <input type="text" name="search" style="width: 90%; padding: 10px 20px; border-radius: 30px;" id=""
-                placeholder="Tìm kiếm ...." value="<?= htmlspecialchars($search) ?>">
-            <button type="submit" name="btnSearch" style="line-height: 15px; border-radius: 15px; padding: 10px 20px"
-                class="btn btn-primary">Search</button>
-        </div>
-    </form>
 
     <table class="table">
         <thead>
@@ -58,20 +52,20 @@
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 ?>
-                <tr>
-                    <td><?= $count ?></td>
-                    <td><img height='100px' src='<?= $row["product_image"] ?>'></td>
-                    <td><?= $row["product_name"] ?></td>
-                    <td><?= $row["color"] ?></td>
-                    <td><?= $row["product_desc"] ?></td>
-                    <td><?= $row["category_name"] ?></td>
-                    <td><?= $row["price"] ?></td>
-                    <td><button class="btn btn-primary" style="height:40px"
-                            onclick="itemEditForm('<?= $row['product_id'] ?>')">Edit</button></td>
-                    <td><button class="btn btn-danger" style="height:40px"
-                            onclick="itemDelete('<?= $row['product_id'] ?>')">Delete</button></td>
-                </tr>
-                <?php
+        <tr>
+            <td><?= $count ?></td>
+            <td><img height='100px' src='<?= $row["product_image"] ?>'></td>
+            <td><?= $row["product_name"] ?></td>
+            <td><?= $row["color"] ?></td>
+            <td><?= $row["product_desc"] ?></td>
+            <td><?= $row["category_name"] ?></td>
+            <td><?= $row["price"] ?></td>
+            <td><button class="btn btn-primary" style="height:40px"
+                    onclick="itemEditForm('<?= $row['product_id'] ?>')">Edit</button></td>
+            <td><button class="btn btn-danger" style="height:40px"
+                    onclick="itemDelete('<?= $row['product_id'] ?>')">Delete</button></td>
+        </tr>
+        <?php
                 $count++;
             }
         } else {
@@ -81,14 +75,21 @@
     </table>
 
     <?php
+    // Điều chỉnh phân trang để tính toán đúng với điều kiện tìm kiếm
+    $countSql = "SELECT COUNT(*) as total FROM product 
+                 JOIN category ON product.category_id = category.category_id";
+
+    if ($search != "") {
+        $countSql .= " WHERE product_name LIKE '%$search%'";
+    }
+
+    $countResult = mysqli_query($conn, $countSql);
+    $row = mysqli_fetch_assoc($countResult);
+    $numRows = $row['total'];
+    $maxPage = ceil($numRows / $rowsPerPage);
+
     // Tạo phân trang
     echo "<div class='pagination'>";
-    $re = mysqli_query($conn, "SELECT * FROM product 
-                                       JOIN category 
-                                       ON product.category_id = category.category_id 
-                                       WHERE product_name LIKE '%$search%'");
-    $numRows = mysqli_num_rows($re);
-    $maxPage = ceil($numRows / $rowsPerPage);
 
     if ($page > 1) {
         echo '<a href="javascript:void(0);" onclick="showProductItems(1)"><<</a>';
