@@ -1,11 +1,17 @@
 function showLogOut() {
-  // Xử lý đăng xuất
-  // Ví dụ: Gửi request POST tới server để xóa cookie hoặc session
-  //...
-  // Thông báo đăng xuất thành công hoặc thông báo l��i
-  alert("Sign out successfully!");
-  window.location.href = "./Login.php";
-  exit();
+  fetch("./controller/logoutController.php", {
+    method: "POST",
+    credentials: "same-origin",
+  })
+    .then((response) => response.text())
+    .then(() => {
+      alert("Sign out successfully!");
+      window.location.href = "./Login.php";
+    })
+    .catch((error) => {
+      console.error("Logout error:", error);
+      alert("Error during logout. Please try again.");
+    });
 }
 
 //hide password

@@ -30,7 +30,7 @@
                 // Display user information
                 echo htmlspecialchars($username);
             } else {
-                echo "Bạn chưa đăng nhập.";
+                echo "You must be login";
             }
             ?>
         </h5>

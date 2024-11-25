@@ -1,6 +1,12 @@
 <?php
 session_start();
 
+// Kiểm tra đăng nhập trước khi kiểm tra timeout
+if (!isset($_SESSION['login'])) {
+    header("Location: LogIn.php");
+    exit();
+}
+
 // Set session timeout duration (e.g., 30 minutes)
 $timeout_duration = 1800; // 1800 seconds = 30 minutes
 
@@ -186,57 +192,57 @@ $_SESSION['last_activity'] = time();
     ?>
     <!-- Script để vẽ biểu đồ -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var ctx = document.getElementById('statisticsChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Users', 'Categories', 'Products', 'Orders'],
-                datasets: [{
-                    label: 'Statistics',
-                    data: [<?php echo $usersCount; ?>, <?php echo $categoriesCount; ?>,
-                        <?php echo $productsCount; ?>, <?php echo $ordersCount; ?>
-                    ],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.5)',
-                        'rgba(54, 162, 235, 0.5)',
-                        'rgba(255, 206, 86, 0.5)',
-                        'rgba(75, 192, 192, 0.5)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('statisticsChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Users', 'Categories', 'Products', 'Orders'],
+                    datasets: [{
+                        label: 'Statistics',
+                        data: [<?php echo $usersCount; ?>, <?php echo $categoriesCount; ?>,
+                            <?php echo $productsCount; ?>, <?php echo $ordersCount; ?>
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 206, 86, 0.5)',
+                            'rgba(75, 192, 192, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
                 },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'System Statistics',
-                        color: 'black',
-                        font: {
-                            size: 28
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
                         }
                     },
-                    legend: {
-                        labels: {
-                            color: 'black'
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'System Statistics',
+                            color: 'black',
+                            font: {
+                                size: 28
+                            }
+                        },
+                        legend: {
+                            labels: {
+                                color: 'black'
+                            }
                         }
                     }
                 }
-            }
+            });
         });
-    });
     </script>
     <script type="text/javascript" src="./assets/js/ajaxWork.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>

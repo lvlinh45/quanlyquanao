@@ -56,37 +56,53 @@ include_once "./config/dbconnect.php";
                         <!-- Search Form -->
                         <form method="GET" class="mb-4">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-8 mb-3">
                                     <input type="text" name="search" class="form-control"
                                         placeholder="Search by product name..."
                                         value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
                                 </div>
-                                <div class="col-md-4">
-                                    <select name="category" class="form-control">
-                                        <option value="">All Categories</option>
-                                        <?php
-                                        $cat_sql = "SELECT * FROM category";
-                                        $cat_result = $conn->query($cat_sql);
-                                        while($cat_row = $cat_result->fetch_assoc()) {
-                                            $selected = (isset($_GET['category']) && $_GET['category'] == $cat_row['category_id']) ? 'selected' : '';
-                                            echo "<option value='".$cat_row['category_id']."' ".$selected.">".$cat_row['category_name']."</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
+                                <div class="col-md-4 mb-3">
                                     <button type="submit" class="btn btn-primary w-100">
                                         <i class="fa fa-search"></i> Search
                                     </button>
                                 </div>
                             </div>
 
-                            <!-- Additional Filters -->
+                            <!-- Filters section -->
                             <div class="filters mt-3">
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3 mb-3">
+                                        <label>Category</label>
+                                        <select name="category" class="form-control">
+                                            <option value="">All Categories</option>
+                                            <?php
+                                            $cat_sql = "SELECT * FROM category";
+                                            $cat_result = $conn->query($cat_sql);
+                                            while($cat_row = $cat_result->fetch_assoc()) {
+                                                $selected = (isset($_GET['category']) && $_GET['category'] == $cat_row['category_id']) ? 'selected' : '';
+                                                echo "<option value='".$cat_row['category_id']."' ".$selected.">".$cat_row['category_name']."</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label>Color</label>
+                                        <select name="color" class="form-control">
+                                            <option value="">All Colors</option>
+                                            <?php
+                                            $color_sql = "SELECT DISTINCT color FROM product WHERE color IS NOT NULL AND color != '' ORDER BY color";
+                                            $color_result = $conn->query($color_sql);
+                                            while($color_row = $color_result->fetch_assoc()) {
+                                                $selected = (isset($_GET['color']) && $_GET['color'] == $color_row['color']) ? 'selected' : '';
+                                                echo "<option value='".$color_row['color']."' ".$selected.">".$color_row['color']."</option>";
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label>Price Range</label>
                                         <select name="price_range" class="form-control">
-                                            <option value="">Price Range</option>
+                                            <option value="">All Prices</option>
                                             <option value="0-100"
                                                 <?php echo (isset($_GET['price_range']) && $_GET['price_range'] == '0-100') ? 'selected' : ''; ?>>
                                                 $0 - $100</option>
@@ -98,7 +114,8 @@ include_once "./config/dbconnect.php";
                                                 $500+</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3 mb-3">
+                                        <label>Sort By</label>
                                         <select name="sort" class="form-control">
                                             <option value="">Sort By</option>
                                             <option value="price_asc"
@@ -150,6 +167,12 @@ include_once "./config/dbconnect.php";
                                         $where_conditions[] = "p.price >= ?";
                                         $params[] = str_replace('+', '', $_GET['price_range']);
                                     }
+                                }
+
+                                // Color condition
+                                if (!empty($_GET['color'])) {
+                                    $where_conditions[] = "p.color = ?";
+                                    $params[] = $_GET['color'];
                                 }
 
                                 // Build the base query

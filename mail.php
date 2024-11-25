@@ -10,12 +10,12 @@ require './PHPMailer/src/SMTP.php';
 $mail = new PHPMailer(true);
 include_once "./config/dbconnect.php";
 
-// Kiểm tra xem có truyền `order_id` qua POST không
+// Check if order_id is passed via POST
 if (isset($_POST["order_id"]) && !empty($_POST["order_id"])) {
-    $order_id = $conn->real_escape_string($_POST["order_id"]); // Bảo vệ SQL Injection
+    $order_id = $conn->real_escape_string($_POST["order_id"]); // Protect from SQL Injection
     $action = $_POST["action"];
 
-    // Lấy email người dùng từ cơ sở dữ liệu
+    // Get user email from database
     $sql = "SELECT * FROM orders 
             INNER JOIN users ON orders.user_id = users.user_id 
             INNER Join order_details on order_details.order_id = orders.order_id
@@ -30,14 +30,14 @@ if (isset($_POST["order_id"]) && !empty($_POST["order_id"])) {
             while ($row = $result->fetch_assoc()) {
                 // Server settings
                 $email = $row['email'];
-                          // Bật gỡ lỗi
+                // Bật gỡ lỗi
                 $mail->isSMTP();                                     // Gửi qua SMTP
-                $mail->Host       = 'smtp.gmail.com';                // Máy chủ SMTP
-                $mail->SMTPAuth   = true;                            // Bật xác thực SMTP
-                $mail->Username   = 'turgn123@gmail.com';            // Gmail của bạn
-                $mail->Password   = 'tqasifkmnscnozxe';              // Mật khẩu ứng dụng
+                $mail->Host = 'smtp.gmail.com';                // Máy chủ SMTP
+                $mail->SMTPAuth = true;                            // Bật xác thực SMTP
+                $mail->Username = 'turgn123@gmail.com';            // Gmail của bạn
+                $mail->Password = 'tqasifkmnscnozxe';              // Mật khẩu ứng dụng
                 $mail->SMTPSecure = 'tls';  // TLS encryption
-                $mail->Port       = 587;                             // Cổng SMTP
+                $mail->Port = 587;                             // Cổng SMTP
 
                 // Recipients
                 $mail->setFrom('turgn123@gmail.com', 'PHP Clother Company');
@@ -45,14 +45,14 @@ if (isset($_POST["order_id"]) && !empty($_POST["order_id"])) {
 
                 // Content
                 $mail->isHTML(true);                                // Email HTML
-                $mail->Subject = 'Notification';
-           
+                $mail->Subject = 'Order Confirmation';
+
                 $mail->Body = '
                     <!DOCTYPE html>
                 <html>
                 <head>
                     <meta charset="UTF-8">
-                    <title>Xác nhận đơn hàng</title>
+                    <title>Order Confirmation</title>
                     <style>
                         .email-container {
                             font-family: Arial, sans-serif;
@@ -104,29 +104,26 @@ if (isset($_POST["order_id"]) && !empty($_POST["order_id"])) {
                             <h1>PHP Clother Company</h1>
                         </div>
                         <div class="email-content">
-                            <p>Chào quý khách,</p>
-                            <p>Cảm ơn bạn đã tin tưởng và đặt hàng tại <strong>PHP Clother Company</strong>. Đơn hàng của bạn đang được chúng tôi xử lý.</p>
-                            <h3>Chi tiết đơn hàng (#' . $order_id . '):</h3>
-                            <!-- Bạn có thể thêm bảng chi tiết sản phẩm ở đây -->
+                            <p>Dear Customer,</p>
+                            <p>Thank you for trusting and ordering from <strong>PHP Clother Company</strong>. Your order is being processed.</p>
+                            <h3>Order Details (#' . $order_id . '):</h3>
                             <table class="order-details" width="100%" cellspacing="0" cellpadding="0">
                                 <tr>
-                                    <th>Sản phẩm</th>
-                                    <th>Số lượng</th>
-                                    <th>Giá</th>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
                                 </tr>
-                                <!-- Ví dụ về một dòng sản phẩm -->
                                 <tr>
-                                    <td> '. $row["product_name"] .' </td>
-                                    <td>'. $row["quantity"] .'</td>
-                                    <td>'. $row["price"] .'.000 VND</td>
+                                    <td> ' . $row["product_name"] . ' </td>
+                                    <td>' . $row["quantity"] . '</td>
+                                    <td>' . $row["price"] . '.000 VND</td>
                                 </tr>
-                                <!-- Thêm các sản phẩm khác nếu cần -->
                             </table>
-                            <p>Nếu bạn có bất kỳ thắc mắc nào, vui lòng liên hệ với chúng tôi qua email hoặc số điện thoại hỗ trợ.</p>
-                            <a href="http://localhost/quanlyquanao" class="btn">Truy cập website</a>
+                            <p>If you have any questions, please contact us via email or support phone number.</p>
+                            <a href="http://localhost/quanlyquanao" class="btn">Visit Website</a>
                         </div>
                         <div class="email-footer">
-                            &copy; ' . date("Y") . ' PHP Clother Company. Mọi quyền được bảo lưu.
+                            &copy; ' . date("Y") . ' PHP Clother Company. All rights reserved.
                         </div>
                     </div>
                 </body>
@@ -137,8 +134,8 @@ if (isset($_POST["order_id"]) && !empty($_POST["order_id"])) {
                 // Gửi email
                 $mail->send();
                 echo '<script>
-                    alert("Đã gửi mail thành công");
-                    window.location.href = "index.php"; // Thay "index.php" bằng đường dẫn trang chủ của bạn
+                    alert("Email sent successfully");
+                    window.location.href = "index.php";
                     </script>';
                 exit; // Dừng thực thi sau khi gửi email và chuyển hướng
             }

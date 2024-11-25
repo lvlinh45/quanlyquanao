@@ -1,8 +1,7 @@
 <head>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 
@@ -109,7 +108,7 @@
                 </div>
                 <div class="modal-body">
                     <form enctype='multipart/form-data' onsubmit="addStaffs()" method="POST">
-                    <div class="form-group">
+                        <div class="form-group">
                             <label for="firstName">First Name:</label>
                             <input type="text" class="form-control" id="firstName" required>
                         </div>
@@ -130,7 +129,7 @@
                         </div>
                         <div class="form-group">
                             <label for="contact">Phone Number:</label>
-                            <input type="text" class="form-control" id="contact" required>
+                            <input type="number" class="form-control" id="contact" required>
                         </div>
                         <div class="form-group">
                             <label for="email">Email:</label>
@@ -140,17 +139,18 @@
                             <label for="password">Password:</label>
                             <input type="password" class="form-control" id="password" required>
                         </div> -->
-                    <div class="form-group">
-                        <label for="password">Password:</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="password" required>
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility()">
-                                    <i class="fa fa-eye" id="toggleIcon"></i>
-                                </button>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control" id="password" required>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-secondary" type="button"
+                                        onclick="togglePasswordVisibility()">
+                                        <i class="fa fa-eye" id="toggleIcon"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
 
                         <div class="form-group">
@@ -173,7 +173,7 @@
                         style="height:40px">Close</button>
                 </div>
             </div>
-            
+
         </div>
     </div>
 
@@ -182,6 +182,6 @@
 
 
 <script type="text/javascript" src="./assets/js/ajaxWork.js"></script>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"></script>
