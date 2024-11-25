@@ -64,17 +64,6 @@ An admin dashboard for shop management with real-time statistics, featuring a co
 - SQL injection prevention
 - Automatic redirect system
 
-## 📁 Project Structure
-
-root/
-├── assets/
-│ ├── css/
-│ └── js/
-├── config/
-├── index.php
-├── LogIn.php
-└── sidebar.php
-
 ## 👨‍💻 Authors
 
 - Luong Van Linh
