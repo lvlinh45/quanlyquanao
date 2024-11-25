@@ -72,4 +72,4 @@ An admin dashboard for shop management with real-time statistics, featuring a co
 
 ---
 
-<p align="center">Made with ❤️ in Vietnam</p>
+<p align="center">Made with ❤️ in Team 8</p>
